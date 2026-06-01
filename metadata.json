@@ -1,0 +1,6 @@
+{
+  "name": "AI Mock Interview Platform",
+  "description": "A polished, self-contained mock interview platform using vanilla HTML, CSS, and JS with customizable resume and job description setup, simulated interactive responses, dynamic difficulty, countdown timers, and final readiness scoring dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
