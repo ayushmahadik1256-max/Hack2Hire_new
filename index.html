@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Mock Interview Platform</title>
+    <!-- Google Fonts for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Custom vanilla stylesheet -->
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <!-- App Header -->
+    <header class="app-header" id="app-header">
+      <div class="header-container">
+        <div class="brand">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><path d="M8 10h.01"></path><path d="M12 10h.01"></path><path d="M16 10h.01"></path></svg>
+          <span class="logo-text">AI Interviewer</span>
+        </div>
+        <div class="header-status">
+          <span id="session-badge" class="status-badge idle">Ready</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <div class="main-container">
+
+        <!-- VIEW 1: Onboarding / Setup -->
+        <section id="onboarding-view" class="view-panel active">
+          <div class="view-header">
+            <h1 class="view-title">Setup Your Mock Interview</h1>
+            <p class="view-subtitle">Upload your resume and provide a target job description. The AI interviewer will formulate tailored, role-specific questions.</p>
+          </div>
+
+          <div class="grid-layout">
+            <div class="card p-6">
+              <h2 class="card-title">
+                <svg class="title-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                1. Upload Resume
+              </h2>
+              
+              <div class="upload-dropzone" id="resume-dropzone">
+                <input class="hidden-input" type="file" id="resume-input" accept=".pdf,.doc,.docx,.txt" />
+                <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <p class="upload-text">Drag & drop your resume file here or <span class="accent-text link-style">Browse Files</span></p>
+                <p class="upload-hint">Supports PDF, DOCX, or TXT (Max 5MB)</p>
+                
+                <div class="file-chosen-banner hidden" id="file-banner">
+                  <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  <span class="file-name" id="file-name-span">resume.pdf</span>
+                  <button type="button" class="remove-file-button" id="remove-file-btn" aria-label="Remove file">×</button>
+                </div>
+              </div>
+
+              <div class="quick-prefills mt-4">
+                <span class="prefill-label">Or use an example Resume:</span>
+                <div class="prefill-buttons-group">
+                  <button type="button" class="btn btn-secondary btn-sm prefill-resume-btn" data-type="swe">Software Engineer Resume</button>
+                  <button type="button" class="btn btn-secondary btn-sm prefill-resume-btn" data-type="pm">Product Manager Resume</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card p-6">
+              <h2 class="card-title">
+                <svg class="title-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                2. Target Job Description
+              </h2>
+              
+              <div class="textarea-container">
+                <textarea id="jd-textarea" class="form-textarea" placeholder="Paste the complete job description or key position expectations here..."></textarea>
+                <div class="word-counter" id="jd-word-count">0 words</div>
+              </div>
+
+              <div class="quick-prefills mt-3">
+                <span class="prefill-label">Prefill Job Pitch:</span>
+                <div class="prefill-buttons-group">
+                  <button type="button" class="btn btn-secondary btn-sm prefill-jd-btn" data-type="swe">Frontend Developer (Vite/React)</button>
+                  <button type="button" class="btn btn-secondary btn-sm prefill-jd-btn" data-type="pm">Associate PM (Design/Strategy)</button>
+                  <button type="button" class="btn btn-secondary btn-sm prefill-jd-btn" data-type="marketing">Growth Marketer (Analytics)</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Onboarding Best Practices Playbook -->
+          <div class="card p-6 mt-6 bg-light-gradient border-accent">
+            <h2 class="card-title text-indigo">
+              <svg class="title-icon mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              Interview Best Practices Playbook
+            </h2>
+            <p class="text-xs text-muted mb-4" style="color: var(--text-muted);">Actionable blueprints customized dynamically for your selected profile:</p>
+            <div class="best-practices-container" id="best-practices-list">
+              <!-- Dynamically populated via script -->
+            </div>
+          </div>
+
+          <div class="setup-footer mt-6">
+            <div class="options-row p-4 card select-card mb-6">
+              <div class="select-group">
+                <label for="category-select" class="form-label font-bold">Job Category</label>
+                <select id="category-select" class="form-select">
+                  <option value="swe" selected>Software Engineer (SWE)</option>
+                  <option value="pm">Product Manager (PM)</option>
+                  <option value="marketing">Growth Marketer</option>
+                </select>
+              </div>
+              <div class="select-group">
+                <label for="difficulty-select" class="form-label font-bold">Starting Difficulty</label>
+                <select id="difficulty-select" class="form-select">
+                  <option value="Easy">Easy (Warmups & foundation)</option>
+                  <option value="Medium" selected>Medium (Standard professional)</option>
+                  <option value="Hard">Hard (In-depth architectural/stress test)</option>
+                </select>
+              </div>
+              <div class="select-group">
+                <label for="questions-count-select" class="form-label font-bold">Total Questions</label>
+                <select id="questions-count-select" class="form-select">
+                  <option value="3">Short Run (3 Questions)</option>
+                  <option value="5" selected>Standard Assessment (5 Questions)</option>
+                  <option value="8">Deep Practice (8 Questions)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="action-btn-container">
+              <button type="button" class="btn btn-primary btn-lg w-full flex-center font-bold" id="start-interview-btn">
+                <span>Begin Live Interview Session</span>
+                <svg class="chevron-icon ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 2: Active Interview Interface -->
+        <section id="interview-view" class="view-panel hidden">
+          <!-- Interview Progress Bar -->
+          <div class="progress-container">
+            <div class="progress-bar" id="interview-progress-bar" style="width: 20%;"></div>
+          </div>
+
+          <div class="interview-grid mt-4">
+            <!-- Left Side: AI Interviewer panel -->
+            <div class="interviewer-column">
+              <div class="card text-center p-6 interviewer-card">
+                <div class="avatar-container animate-pulse">
+                  <div class="avatar-ai">
+                    <svg class="avatar-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><line x1="8" y1="16" x2="8" y2="16"></line><line x1="16" y1="16" x2="16" y2="16"></line></svg>
+                  </div>
+                  <div class="active-pulse-ring"></div>
+                </div>
+                
+                <h3 class="interviewer-name">Interviewer Bot v1.2</h3>
+                <span class="pill pill-blue mb-4 inline-block" id="question-progress-label">Question 1 of 5</span>
+                
+                <!-- Countdown Visual Timer -->
+                <div class="timer-box mt-4">
+                  <div class="circular-timer-wrapper">
+                    <svg class="circle-svg" viewBox="0 0 100 100">
+                      <circle class="circle-bg" cx="50" cy="50" r="45" />
+                      <circle class="circle-fill" id="timer-ring-fill" cx="50" cy="50" r="45" stroke-dasharray="282.7" stroke-dashoffset="0" />
+                    </svg>
+                    <div class="timer-countdown-text" id="timer-countdown-value">60</div>
+                  </div>
+                  <p class="timer-label text-xs uppercase tracking-wider mt-2">Seconds Remaining</p>
+                </div>
+
+                <div class="hint-tip">
+                  <span class="hint-badge font-bold">Pro-Tip</span>
+                  <p class="hint-text text-xs">Clarity and depth scoring improve if you structure your answers using the STAR method (Situation, Task, Action, Result).</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Side: Interaction workspace -->
+            <div class="workspace-column">
+              <!-- AI Question Bubble -->
+              <div class="card p-6 border-accent bg-light-gradient relative">
+                <div class="role-marker">AI INTERVIEWER QUESTION</div>
+                <h2 class="interview-question" id="question-text">
+                  Can you please describe a challenging frontend architectural problem you faced recently, how you analyzed it, and what specifically you decided to implement to resolve it permanently?
+                </h2>
+              </div>
+
+              <!-- Answer Box Form -->
+              <div class="card p-6 mt-4">
+                <div class="flex-justify mb-2">
+                  <span class="input-label font-bold">Your Response Answer</span>
+                  <span class="char-count text-xs" id="answer-char-count">0 characters entered</span>
+                </div>
+
+                <textarea id="answer-textarea" class="form-textarea response-textarea" placeholder="Type your structured answer here... Be descriptive to earn depth points!"></textarea>
+
+                <div class="button-footer-row mt-4">
+                  <!-- Audio Mock Recording Trigger -->
+                  <button type="button" class="btn btn-secondary flex-center" id="record-audio-btn">
+                    <svg class="mic-icon mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                    <span id="record-audio-text">Record Answer Mock</span>
+                  </button>
+
+                  <button type="button" class="btn btn-success flex-center font-bold" id="submit-answer-btn">
+                    <span>Submit & Next Question</span>
+                    <svg class="send-icon ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                  </button>
+                </div>
+
+                <!-- Simulation Visualizing Audio Status -->
+                <div class="audio-feedback-panel hidden" id="audio-visualizer-panel">
+                  <div class="sound-wave">
+                    <span class="stroke"></span>
+                    <span class="stroke"></span>
+                    <span class="stroke"></span>
+                    <span class="stroke"></span>
+                    <span class="stroke"></span>
+                    <span class="stroke"></span>
+                    <span class="stroke"></span>
+                    <span class="stroke"></span>
+                  </div>
+                  <span class="speech-status text-xs" id="audio-status-text">Listening for response transcription... (Speak clearly)</span>
+                </div>
+              </div>
+
+              <!-- COLLAPSIBLE DEBUG indicator showing current difficulty (Requirement 1, View 2) -->
+              <div class="collapsible-debug-box mt-4">
+                <button type="button" class="debug-header-toggle" id="debug-toggle-btn">
+                  <span>🛠️ System Debug & Mock Integration State</span>
+                  <span class="chevron-arrow" id="debug-arrow">▲</span>
+                </button>
+                <div class="debug-content-body active" id="debug-panel-body">
+                  <div class="debug-grid">
+                    <div class="debug-item">
+                      <span class="debug-label">Active State Difficulty</span>
+                      <span class="pill pill-red" id="debug-difficulty-indicator">Medium</span>
+                    </div>
+                    <div class="debug-item">
+                      <span class="debug-label">Current Index</span>
+                      <span class="debug-value" id="debug-current-index">0 / 5</span>
+                    </div>
+                    <div class="debug-item">
+                      <span class="debug-label">Answer Timeline Latency</span>
+                      <span class="debug-value">220ms (simulated ping)</span>
+                    </div>
+                    <div class="debug-item">
+                      <span class="debug-label">API Routing Scope</span>
+                      <span class="debug-value text-underline" id="debug-api-scope">Mock Mode [Ready for Integration]</span>
+                    </div>
+                  </div>
+                  <p class="debug-disclaimer">This telemetry displays the system level difficulty adjustment engine (Adaptive Difficulty Scaling). Difficulty adjusts dynamically based on accuracy score performance.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 3: Results Dashboard -->
+        <section id="results-view" class="view-panel hidden">
+          <div class="card p-8 text-center bg-dark-slate text-white hero border-none">
+            <h1 class="view-title text-white">Interview Readiness Dashboard</h1>
+            <p class="text-slate-300">Your mock interview assessment report card is prepared. See your performance scores and actionable skill improvements below.</p>
+          </div>
+
+          <div class="results-layout grid-layout mt-6">
+            <!-- Left Panel: Final Score Circular Gauge -->
+            <div class="card p-6 flex-center-col border-accent-blue bg-light-gradient">
+              <h2 class="card-title text-center text-indigo mb-4">Overall Readiness</h2>
+              
+              <div class="score-circle-wrapper">
+                <svg class="score-circle-svg" viewBox="0 0 120 120">
+                  <circle class="score-bg" cx="60" cy="60" r="54" />
+                  <circle class="score-fill" id="results-score-ring" cx="60" cy="60" r="54" stroke-dasharray="339.3" stroke-dashoffset="100" />
+                </svg>
+                <div class="score-content">
+                  <span class="score-number" id="final-score-text">85</span>
+                  <span class="score-total">/100</span>
+                </div>
+              </div>
+
+              <div class="badge-status-container mt-4 text-center">
+                <span class="pill pill-green pill-lg" id="readiness-descriptor">Highly Ready!</span>
+                <p class="text-xs text-muted mt-2 block" id="assessment-verdict">Exceptional answers demonstrating STAR execution. Ready for corporate tier rounds.</p>
+              </div>
+            </div>
+
+            <!-- Right Panel: Detailed Metrics with Progress Bars -->
+            <div class="card p-6">
+              <h2 class="card-title">
+                <svg class="title-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                Key Interview Vector Breakdown
+              </h2>
+              
+              <div class="metrics-list mt-4">
+                <!-- Accuracy Metric -->
+                <div class="metric-item">
+                  <div class="metric-label-row">
+                    <span class="metric-name font-bold">Concept Accuracy</span>
+                    <span class="metric-percentage font-bold" id="metric-accuracy-val">88%</span>
+                  </div>
+                  <div class="metric-progress-outer">
+                    <div class="metric-progress-inner" id="progress-accuracy" style="width: 88%;"></div>
+                  </div>
+                </div>
+
+                <!-- Clarity Metric -->
+                <div class="metric-item">
+                  <div class="metric-label-row">
+                    <span class="metric-name font-bold">Answer Clarity & Grammar</span>
+                    <span class="metric-percentage font-bold" id="metric-clarity-val">82%</span>
+                  </div>
+                  <div class="metric-progress-outer">
+                    <div class="metric-progress-inner" id="progress-clarity" style="width: 82%;"></div>
+                  </div>
+                </div>
+
+                <!-- Depth Metric -->
+                <div class="metric-item">
+                  <div class="metric-label-row">
+                    <span class="metric-name font-bold">Technical Depth & Examples</span>
+                    <span class="metric-percentage font-bold" id="metric-depth-val">79%</span>
+                  </div>
+                  <div class="metric-progress-outer">
+                    <div class="metric-progress-inner" id="progress-depth" style="width: 79%;"></div>
+                  </div>
+                </div>
+
+                <!-- Relevance Metric -->
+                <div class="metric-item">
+                  <div class="metric-label-row">
+                    <span class="metric-name font-bold">Relevance to Job Spec</span>
+                    <span class="metric-percentage font-bold" id="metric-relevance-val">91%</span>
+                  </div>
+                  <div class="metric-progress-outer">
+                    <div class="metric-progress-inner" id="progress-relevance" style="width: 91%;"></div>
+                  </div>
+                </div>
+
+                <!-- Time Efficiency Metric -->
+                <div class="metric-item">
+                  <div class="metric-label-row">
+                    <span class="metric-name font-bold">Time Efficiency (Speech Pacing)</span>
+                    <span class="metric-percentage font-bold" id="metric-time-val">85%</span>
+                  </div>
+                  <div class="metric-progress-outer">
+                    <div class="metric-progress-inner" id="progress-time" style="width: 85%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Text to Speech Evaluation Player -->
+          <div class="card p-5 mt-6 bg-light-gradient border-accent flex-justify flex-wrap gap-4" style="border-left: 4px solid var(--accent);">
+            <div class="flex-center-start gap-3">
+              <div class="avatar-ai" style="width: 44px; height: 44px; min-width: 44px; margin-bottom: 0; flex-shrink: 0; animation: none;">
+                <svg style="width: 20px; height: 20px; color: var(--accent);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+              </div>
+              <div>
+                <h4 class="font-bold text-sm" style="color: var(--bg-dark-slate); margin: 0; font-size: 0.95rem; font-family: var(--font-display);">AI Audio Assist Dictation</h4>
+                <p class="text-xs text-muted text-slate-500" style="margin: 0; font-size: 0.8rem;" id="audio-playback-status">Ready to speak your personalized strengths and grow points aloud.</p>
+              </div>
+            </div>
+            <div class="flex-center gap-2">
+              <button type="button" class="btn btn-primary flex-center font-bold" id="hear-evaluation-btn">
+                <svg class="btn-icon mr-1.5" style="width: 16px; height: 16px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <span>Hear My Evaluation</span>
+              </button>
+              <button type="button" class="btn btn-secondary flex-center font-bold hidden" id="stop-evaluation-btn" style="background-color: #ef4444; color: white; border: none;">
+                <svg class="btn-icon mr-1.5" style="width: 16px; height: 16px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect></svg>
+                <span>Stop Voice Feedback</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Strengths & Weaknesses Section -->
+          <div class="grid-layout mt-6">
+            <div class="card p-6 bg-green-glow">
+              <h3 class="card-sub-title text-green flex-center-start font-bold">
+                <svg class="bullet-icon-lg text-green mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Core Strengths Demonstrated
+              </h3>
+              <ul class="feedback-list mt-3" id="strengths-list">
+                <!-- Dynamically Populated -->
+                <li>Shows strong domain vocabulary fitting the target frontend profile.</li>
+                <li>Consistently structured using structural scenarios (STAR framework).</li>
+                <li>Excellent relevance linking resume expertise to core JD responsibilities.</li>
+              </ul>
+            </div>
+
+            <div class="card p-6 bg-red-glow">
+              <h3 class="card-sub-title text-amber flex-center-start font-bold">
+                <svg class="bullet-icon-lg text-amber mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                Actionable Growth Opportunities
+              </h3>
+              <ul class="feedback-list mt-3" id="weaknesses-list">
+                <!-- Dynamically Populated -->
+                <li>Consider adding deeper architectural details around caching & performance indexes.</li>
+                <li>Avoid talking past the 60 sec window to boost time utility scores.</li>
+                <li>Structure the introduction to deliver clear, actionable metrics earlier.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Bottom Actions -->
+          <div class="flex-center mt-8 gap-4 mb-12">
+            <button type="button" class="btn btn-secondary btn-lg flex-center" id="export-report-btn">
+              <svg class="btn-icon mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>Download Assessment PDF (Mock)</span>
+            </button>
+            <button type="button" class="btn btn-primary btn-lg flex-center font-bold" id="restart-btn">
+              <svg class="btn-icon mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+              <span>Launch Another Interview Session</span>
+            </button>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- App Toast Alert -->
+    <div class="toast-alert" id="toast-wrapper">
+      <span class="toast-message" id="toast-text">Configuration prefilled successfully!</span>
+    </div>
+
+    <!-- Script Entry point -->
+    <script type="module" src="./src/script.js"></script>
+  </body>
+</html>
